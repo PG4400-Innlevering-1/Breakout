@@ -8,7 +8,7 @@ public:
 	Ball();
 	~Ball();
 
-	SDL_Rect* ballDimensions = new SDL_Rect();
+	SDL_Rect mCollider;
 
 	float getPosX() const;
 	float getPosY() const;
@@ -19,16 +19,20 @@ public:
 	void move(const Paddle paddle, const double deltaTime);
 	void addInitialVelocity();
 
-	void handleEvent(SDL_Event e);
+	void handleEvent(const SDL_Event e);
 
 	void invertY();
 	void invertX();
+
+	
 private:
-	float ballSpeed;
+	float mBallSpeed;
 
 	float mPosX, mPosY;
 
 	float mVelX, mVelY;
+
+	float mTinyOffset = 0.00025;
 
 	bool isAttached;
 

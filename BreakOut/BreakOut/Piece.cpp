@@ -13,9 +13,8 @@ Piece::~Piece()
 {
 }
 
-void Piece::hitByBall(Ball *ball, SDL_Rect rect)
+bool Piece::hitByBall(Ball *ball, const SDL_Rect rect)
 {
-
 	auto collision = SDL_HasIntersection(&rect, pieceDimentions);
 	
 	if(collision)
@@ -26,7 +25,8 @@ void Piece::hitByBall(Ball *ball, SDL_Rect rect)
 			ball->invertY();
 		}
 		isVisible = false;
-
 	}
+
+	return collision;
 }
 

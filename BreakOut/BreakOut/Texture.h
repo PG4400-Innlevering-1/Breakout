@@ -13,14 +13,14 @@ public:
 	void free();
 
 	// renders the texture to the given point
-	void render(float x, float y, struct SDL_Rect* clip, SDL_Renderer* gRenderer) const;
+	void render(const float x, const float y, const SDL_Rect* clip, SDL_Renderer* gRenderer) const;
 
 	// get the image dimetions
 	int getWidth() const;
 	int getHeigth() const;
 
 	// loads the image
-	bool loadTexture(std::string path, SDL_Renderer* gRenderer);
+	bool loadTexture(const std::string path, SDL_Renderer* gRenderer);
 
 
 private:

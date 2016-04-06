@@ -1,14 +1,14 @@
 #include "Ball.h"
 #include "Window.h"
-#define PI 3.14159265
+#include <cmath>
 
 
 Ball::Ball()
 {
-	ballDimensions->h = 16;
-	ballDimensions->w = 16;
-	ballDimensions->x = 160;
-	ballDimensions->y = 200;
+	mCollider.h = 16;
+	mCollider.w = 16;
+	mCollider.x = 160;
+	mCollider.y = 200;
 
 	mPosX = (SCREEN_WIDTH / 2) - (16 / 2);
 	mPosY = 550;
@@ -17,13 +17,18 @@ Ball::Ball()
 	mVelY = 0;
 
 	isAttached = true;
-	ballSpeed = 200.f;
+	mBallSpeed = 2.f;
 }
 
 
 float Ball::getPosX() const
 {
 	return mPosX;
+}
+
+float Ball::getPosY() const
+{
+	return mPosY;
 }
 
 float Ball::getVelX() const
@@ -42,41 +47,38 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 	if (mPosY < 0)
 	{
 		// entry angle = exit angle
+		mPosY += 0.5;
 		mVelY = -mVelY;
 	}
-	else if (mPosX < 0 || SCREEN_WIDTH < mPosX + ballDimensions->w)
+	else if (mPosX < 0 || SCREEN_WIDTH < mPosX + mCollider.w)
 	{
 		// entry angle = exit angle
 		mVelX = -mVelX;
 	}
-	else if (SCREEN_HEIGHT < mPosY + ballDimensions->h)
+	else if (SCREEN_HEIGHT < mPosY + mCollider.h)
 	{
 		mVelX = 0;
 		mVelY = 0;
 	}
-	else if (paddle.getPosY() < mPosY + ballDimensions->h &&
-		paddle.getPosX() < mPosX + ballDimensions->w / 2 &&
-		paddle.getPosX() + paddle.paddleDimentions->w > mPosX + ballDimensions->w / 2)
+	else if (paddle.getPosY() < mPosY + mCollider.h &&
+		paddle.getPosX() < mPosX + mCollider.w / 2 &&
+		paddle.getPosX() + paddle.paddleDimentions->w > mPosX + mCollider.w / 2)
 	{
 		// returns the point from 22.5 - 157.2 on the paddle left to right
-		float pointOnPaddle = mPosX + (ballDimensions->w / 2) + 22.5 - paddle.getPosX();
+		float pointOnPaddle = mPosX + (mCollider.w / 2) + 22.5 - paddle.getPosX();
 
 		// use this point to get a value range(-1, 1) for the velocity x
-		mVelX = -ballSpeed*cos(pointOnPaddle * PI / 180);
+		mVelX = -200*cos(pointOnPaddle * M_PI / 180);
 
 		// reflect in the opposite direction for the y axis
+		mPosY -= 0.5;
 		mVelY = -mVelY;
 
 		// debug printing
-		printf("mVelX = %f, %f, %f\n", mVelX, pointOnPaddle, mVelY);
+		//printf("mVelX = %f, %f, %f\n", mVelX, pointOnPaddle, mVelY);
 	}
-
 }
 
-float Ball::getPosY() const
-{
-	return mPosY;
-}
 
 void Ball::move(const Paddle paddle, const double deltaTime)
 {
@@ -89,8 +91,8 @@ void Ball::move(const Paddle paddle, const double deltaTime)
 	else
 	{
 		// physics engine really simple
-		mPosY += mVelY*deltaTime;
-		mPosX += mVelX*deltaTime;
+		mPosY += mVelY*deltaTime*mBallSpeed;
+		mPosX += mVelX*deltaTime*mBallSpeed;
 
 		checkCollision(paddle, deltaTime);
 	}
@@ -102,19 +104,22 @@ void Ball::addInitialVelocity()
 	{
 		mVelY = -200;
 	}
+	isAttached = false;
 }
 
-void Ball::invertY()
+void Ball::invertY() 
 {
+	mPosY -= mVelY * mTinyOffset;
 	mVelY = -mVelY;
 }
 
 void Ball::invertX()
 {
+	mPosX -= mVelX * mTinyOffset;
 	mVelX = -mVelX;
 }
 
-void Ball::handleEvent(SDL_Event e)
+void Ball::handleEvent(const SDL_Event e)
 {
 	// if a key was pressed
 	if (e.type == SDL_KEYDOWN)
@@ -122,8 +127,7 @@ void Ball::handleEvent(SDL_Event e)
 		switch (e.key.keysym.sym)
 		{
 		case SDLK_UP:
-			addInitialVelocity();
-			isAttached = false;
+			addInitialVelocity();		
 			break;
 		}
 	}

@@ -2,7 +2,7 @@
 #include <SDL_image.h>
 
 
-Texture::Texture()
+Texture::Texture(): mWidth(0), mHeight(0)
 {
 }
 
@@ -32,7 +32,7 @@ int Texture::getHeigth() const
 }
 
 
-void Texture::render(float x, float y, struct SDL_Rect* clip, SDL_Renderer* gRenderer) const
+void Texture::render(const float x, const float y, const SDL_Rect* clip, SDL_Renderer* gRenderer) const
 {
 	// set the rendering space and render to screen
 	SDL_Rect renderingQuad = { x, y, mWidth, mHeight };
@@ -49,13 +49,13 @@ void Texture::render(float x, float y, struct SDL_Rect* clip, SDL_Renderer* gRen
 }
 
 
-bool Texture::loadTexture(std::string path, SDL_Renderer* gRenderer)
+bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer)
 {
 	// the final texture
 	SDL_Texture* texture = nullptr;
 
 	// load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+	auto* loadedSurface = IMG_Load(path.c_str());
 	if (loadedSurface == nullptr)
 	{
 		printf("Unable to load image %s SDL_image ERROR: %s\n", path.c_str(), IMG_GetError());

@@ -21,9 +21,11 @@ public:
 
 	void free() const;
 
-	void handleEvent(SDL_Event e);
+	void handleEvent(const SDL_Event e);
 
-	
+	void movePaddleRight();
+	void movePaddleLeft();
+
 
 private:
 	// Position

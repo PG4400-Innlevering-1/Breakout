@@ -14,7 +14,7 @@ public:
 	
 	bool isVisible = true;
 
-	void hitByBall(Ball* ball, SDL_Rect rect);
+	bool hitByBall(Ball* ball, const SDL_Rect rect);
 	
 };
 

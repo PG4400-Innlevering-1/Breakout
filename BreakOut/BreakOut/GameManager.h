@@ -40,7 +40,7 @@ public:
 	void tick();
 
 	// takes care of the rendering to the screen
-	void render() const;
+	void render();
 
 	// close the game and clean up
 	void close();

@@ -56,24 +56,39 @@ void Paddle::move(double deltaTime)
 	}
 }
 
+void Paddle::movePaddleLeft()
+{
+	if(mPosX >= 0)
+	{
+		mVelX -= VELOCITY;
+	}
+}
+
+void Paddle::movePaddleRight()
+{
+	if (mPosX + paddleDimentions->w <= SCREEN_WIDTH)
+	{
+		mVelX += VELOCITY;
+	}
+}
+
 void Paddle::free() const
 {
 	delete paddleDimentions;
 }
 
-void Paddle::handleEvent(SDL_Event e)
+void Paddle::handleEvent(const SDL_Event e)
 {
-
 	// if a key was pressed
 	if(e.type == SDL_KEYDOWN)
 	{
 		switch(e.key.keysym.sym)
 		{
 		case SDLK_LEFT:
-			mVelX -= VELOCITY;
+			movePaddleLeft();
 			break;
 		case SDLK_RIGHT:
-			mVelX += VELOCITY;
+			movePaddleRight();
 			break;
 		} 
 	}  

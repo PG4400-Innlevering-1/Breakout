@@ -134,15 +134,19 @@ void GameManager::tick()
 	SDL_Rect ballRect;
 	ballRect.x = ball.getPosX();
 	ballRect.y = ball.getPosY();
-	ballRect.w = ball.ballDimensions->w;
-	ballRect.h = ball.ballDimensions->h;
+	ballRect.w = ball.mCollider.w;
+	ballRect.h = ball.mCollider.h;
 
 	// Check collision
 	for (auto & piece : pieces)
 	{
 		if (piece.isVisible) 
 		{
-			piece.hitByBall(&ball, ballRect);
+			auto hit = piece.hitByBall(&ball, ballRect);
+			// We do not want to have more than 1 collision per frame
+			if(hit) {
+				break;
+			}
 		}
 	}	
 
@@ -155,7 +159,7 @@ void GameManager::tick()
 	}
 }
 
-void GameManager::render() const
+void GameManager::render()
 {
 	// Render black background
 	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xff);
@@ -167,7 +171,7 @@ void GameManager::render() const
 	spriteSheet->render(paddle.getPosX(), paddle.getPosY(), paddle.paddleDimentions, gRenderer); 
 
 	// render the ball
-	spriteSheet->render(ball.getPosX(), ball.getPosY(), ball.ballDimensions, gRenderer);
+	spriteSheet->render(ball.getPosX(), ball.getPosY(), &ball.mCollider, gRenderer);
 
 	
 	for (auto i = 0; i < PIECES; i++)
@@ -222,7 +226,7 @@ void GameManager::close()
 	SDL_Quit();
 }
 
-void GameManager::initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces)
+void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces)
 {
 	for (auto i = 0; i < PIECES; i++)
 	{
