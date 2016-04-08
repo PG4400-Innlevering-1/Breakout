@@ -1,8 +1,8 @@
 #pragma once
 #include "../packages/sdl2.v140.2.0.4/build/native/include/SDL_hints.h"
 
-class Timer
-{
+class Timer {
+	
 public:
 	Timer();
 	~Timer();

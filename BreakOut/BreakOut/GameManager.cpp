@@ -1,48 +1,48 @@
+#include <stdexcept>
 #include "GameManager.h"
 #include "../packages/sdl2_image.v140.2.0.1/build/native/include/SDL_image.h"
 
-GameManager::GameManager(): mRunning(true)
-{
+GameManager::GameManager(): mRunning(true) {
 	fpsTimer.start();
 }
 
-bool GameManager::loadMedia() const
-{
+bool GameManager::loadMedia() const {
+
 	// load success flag
 	auto success = true;
 	
 	// Load the cat
 	bool isLoaded = gTexture->loadTexture("res/cat.png", gRenderer);
-	if(!isLoaded)
-	{
+
+	if(!isLoaded) {
+
 		printf("failed to load the texture image\n");
 		success = false;
 	}
+
 	isLoaded = spriteSheet->loadTexture("res/breakout_sprites.png", gRenderer);
-	if(!isLoaded)
-	{
+
+	if(!isLoaded) {
+
 		printf("failed to load sprite sheet image\n");
 		success = false;
 	}
 	return success;
 }
 
-bool GameManager::init()
-{
+bool GameManager::init() {
+
 	// success flag
 	auto success = true;
 
 	// init SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("SDL could not initialize SDL ERROR: %s\n", SDL_GetError());
 		success = false;
 	}
-	else
-	{
+	else {
 		//Set texture filtering to linear
-		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-		{
+		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
 			printf("Warning: Linear texture filtering not enabled!");
 		}
 
@@ -51,25 +51,26 @@ bool GameManager::init()
 			SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN
 			);
-		if (window.window == nullptr)
-		{
+		
+		if (window.window == nullptr) {
 			printf("Window could not be created SDL ERROR: %s\n", SDL_GetError());
 			success = false;
-		}else
-		{
+
+		} else {
+
 			// create the renderer for the window
 			gRenderer = SDL_CreateRenderer(window.window, -1, SDL_RENDERER_ACCELERATED);
-			if(gRenderer == nullptr)
-			{
+			
+			if(gRenderer == nullptr){
 				printf("Renderer could not be created SDL ERROR %s\n", SDL_GetError());
 				success = false;
-			}
-			else
-			{
+			
+			} else {
+				
 				// init png loading
 				int imgFlags = IMG_INIT_PNG;
-				if (!(IMG_Init(imgFlags) & imgFlags))
-				{
+
+				if (!(IMG_Init(imgFlags) & imgFlags)) {
 					printf("SDL_Image could not be initalized, SDL_Image ERROR: %s\n", IMG_GetError());
 					success = false;
 				}
@@ -83,16 +84,14 @@ bool GameManager::init()
 	return success;
 }
 
-void GameManager::pause()
-{
+void GameManager::pause() {
 }
 
-void GameManager::resume()
-{
+void GameManager::resume() {
 }
 
-void GameManager::handleEvents()
-{
+void GameManager::handleEvents() {
+	
 	//Handle events on queue
 	while (SDL_PollEvent(&event) != 0)
 	{
@@ -107,8 +106,7 @@ void GameManager::handleEvents()
 	ball.handleEvent(event);
 }
 
-void GameManager::tick()
-{
+void GameManager::tick() {
 	capTimer.start();
 
 	// Calcuclate delta time
@@ -138,8 +136,7 @@ void GameManager::tick()
 	ballRect.h = ball.mCollider.h;
 
 	// Check collision
-	for (auto & piece : pieces)
-	{
+	for (auto & piece : pieces) {
 		if (piece.isVisible) 
 		{
 			auto hit = piece.hitByBall(&ball, ballRect);
@@ -152,15 +149,14 @@ void GameManager::tick()
 
 
 	int frameTicks = capTimer.getTicks();
-	if(frameTicks < SCREEN_TICKS_PER_FRAME)
-	{
+	if(frameTicks < SCREEN_TICKS_PER_FRAME) {
 		// wait the remaining time
 		SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
 	}
 }
 
-void GameManager::render()
-{
+void GameManager::render() {
+
 	// Render black background
 	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xff);
 
@@ -174,30 +170,29 @@ void GameManager::render()
 	spriteSheet->render(ball.getPosX(), ball.getPosY(), &ball.mCollider, gRenderer);
 
 	
-	for (auto i = 0; i < PIECES; i++)
-	{
-		switch(i % 5)
-		{
-		case 0:
+	for (auto i = 0; i < PIECES; i++) {
+
+		switch(i % 5) {
+			case 0:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 255, 255);
 			break;
-		case 1:
+			case 1:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
 			break;
-		case 2:
+			case 2:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 0,  255);
 			break;
-		case 3:
+			case 3:
 			SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
 			break;
-		case 4:
+			case 4:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 255, 255);
 			break;
-		default:
+			default:
 			SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 			break;
 		} 
-			
+
 		// only if they're not hit
 		if (pieces[i].isVisible) {
 			SDL_RenderFillRect(gRenderer, pieces[i].pieceDimentions);
@@ -209,8 +204,7 @@ void GameManager::render()
 	SDL_RenderPresent(gRenderer);
 }
 
-void GameManager::close()
-{
+void GameManager::close() {
 	// free loaded images
 	gTexture->free();
 	spriteSheet->free();
@@ -226,8 +220,7 @@ void GameManager::close()
 	SDL_Quit();
 }
 
-void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces)
-{
+void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces) {
 	for (auto i = 0; i < PIECES; i++)
 	{
 		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;
@@ -235,7 +228,6 @@ void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces)
 	}
 }
 
-GameManager::~GameManager()
-{
+GameManager::~GameManager() {
 	
 }

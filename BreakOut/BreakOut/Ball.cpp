@@ -126,7 +126,7 @@ void Ball::handleEvent(const SDL_Event e)
 	{
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_UP:
+			case SDLK_UP:
 			addInitialVelocity();		
 			break;
 		}
