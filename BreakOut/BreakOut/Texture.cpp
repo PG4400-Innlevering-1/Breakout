@@ -6,15 +6,6 @@
 
 using namespace std;
 
-struct MyException : public exception {
-
-	const char * what () const throw () {
-
-		return "C++ Exception";
-	}
-};
-
-
 Texture::Texture(): mWidth(0), mHeight(0) {
 }
 
@@ -65,6 +56,7 @@ bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer) {
 	try {
 		if (loadedSurface == nullptr) {
 			printf("Unable to load image %s SDL_image ERROR: %s\n", path.c_str(), IMG_GetError());
+			throw 99;
 
 		} else{
 
@@ -73,14 +65,14 @@ bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer) {
 			if (texture == nullptr) {
 				printf("Unable to optimize image %s! SDL ERROR %s\n", path.c_str(), SDL_GetError());
 			}
+
 		// get rid of old loaded surface
 			SDL_FreeSurface(loadedSurface);
 		}
-	}catch(MyException& e) {
 
-		std::cout << "MyException caught" << std::endl;
-		std::cout << e.what() << std::endl;
+	}catch(int x) {
 
+		cout << "Unable to Load texture, ERROR NUMBER: " << x << endl;
 	}
 
 	gTexture = texture;
