@@ -1,6 +1,18 @@
 #include "Texture.h"
 #include <stdexcept>
 #include <SDL_image.h>
+#include <iostream>
+#include <exception>
+
+using namespace std;
+
+struct MyException : public exception {
+
+	const char * what () const throw () {
+
+		return "C++ Exception";
+	}
+};
 
 
 Texture::Texture(): mWidth(0), mHeight(0) {
@@ -64,9 +76,11 @@ bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer) {
 		// get rid of old loaded surface
 			SDL_FreeSurface(loadedSurface);
 		}
-	}catch() {
-		
-		cerr << e.what() << endl;
+	}catch(MyException& e) {
+
+		std::cout << "MyException caught" << std::endl;
+		std::cout << e.what() << std::endl;
+
 	}
 
 	gTexture = texture;
