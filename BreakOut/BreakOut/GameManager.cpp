@@ -6,37 +6,41 @@ GameManager::GameManager(): mRunning(true) {
 	fpsTimer.start();
 }
 
-bool GameManager::loadMedia() const {
-
+bool GameManager::loadMedia() 
+{
 	// load success flag
 	auto success = true;
 	
 	// Load the cat
-	bool isLoaded = gTexture->loadTexture("res/cat.png", gRenderer);
-
+	auto isLoaded = gTexture.loadTexture("res/cat.png", gRenderer);
 	if(!isLoaded) {
 
 		printf("failed to load the texture image\n");
 		success = false;
 	}
 
-	isLoaded = spriteSheet->loadTexture("res/breakout_sprites.png", gRenderer);
-
+	isLoaded = spriteSheet.loadTexture("res/breakout_sprites.png", gRenderer);
 	if(!isLoaded) {
-
 		printf("failed to load sprite sheet image\n");
+	}
+
+	isLoaded = bgMusic.loadMedia();
+	if(!isLoaded)
+	{
+		printf("Failed to load music\n");
 		success = false;
 	}
+
 	return success;
 }
 
-bool GameManager::init() {
-
+bool GameManager::init() 
+{
 	// success flag
 	auto success = true;
 
-	// init SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	// init SDL video and audio
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		printf("SDL could not initialize SDL ERROR: %s\n", SDL_GetError());
 		success = false;
 	}
@@ -74,23 +78,31 @@ bool GameManager::init() {
 					printf("SDL_Image could not be initalized, SDL_Image ERROR: %s\n", IMG_GetError());
 					success = false;
 				}
+				else {
+					// init SDL_mixer
+					success = bgMusic.init();
+				}
 			}
 		}
-		
 	}
-
+	// initialize the pieces
 	initBlocks(pieces);
-	
+
 	return success;
 }
 
-void GameManager::pause() {
+void GameManager::pause() 
+{
+	bgMusic.pause;
 }
 
-void GameManager::resume() {
+void GameManager::resume() 
+{
+	bgMusic.resume;
 }
 
-void GameManager::handleEvents() {
+void GameManager::handleEvents() 
+{
 	
 	//Handle events on queue
 	while (SDL_PollEvent(&event) != 0)
@@ -106,7 +118,8 @@ void GameManager::handleEvents() {
 	ball.handleEvent(event);
 }
 
-void GameManager::tick() {
+void GameManager::tick() 
+{
 	capTimer.start();
 
 	// Calcuclate delta time
@@ -135,7 +148,7 @@ void GameManager::tick() {
 	ballRect.w = ball.mCollider.w;
 	ballRect.h = ball.mCollider.h;
 
-	// Check collision
+	// Check collision with the pieces
 	for (auto & piece : pieces) {
 		if (piece.isVisible) 
 		{
@@ -155,7 +168,8 @@ void GameManager::tick() {
 	}
 }
 
-void GameManager::render() {
+void GameManager::render() 
+{
 
 	// Render black background
 	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xff);
@@ -164,31 +178,32 @@ void GameManager::render() {
 	SDL_RenderClear(gRenderer);
 
 	// render the paddle
-	spriteSheet->render(paddle.getPosX(), paddle.getPosY(), paddle.paddleDimentions, gRenderer); 
+	spriteSheet.render(paddle.getPosX(), paddle.getPosY(), paddle.paddleDimentions, gRenderer); 
 
 	// render the ball
-	spriteSheet->render(ball.getPosX(), ball.getPosY(), &ball.mCollider, gRenderer);
+	spriteSheet.render(ball.getPosX(), ball.getPosY(), &ball.mCollider, gRenderer);
 
 	
 	for (auto i = 0; i < PIECES; i++) {
 
-		switch(i % 5) {
-			case 0:
+		switch(i % 5) 
+		{
+		case 0:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 255, 255);
 			break;
-			case 1:
+		case 1:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
 			break;
-			case 2:
+		case 2:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 0,  255);
 			break;
-			case 3:
+		case 3:
 			SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
 			break;
-			case 4:
+		case 4:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 255, 255);
 			break;
-			default:
+		default:
 			SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 			break;
 		} 
@@ -204,12 +219,11 @@ void GameManager::render() {
 	SDL_RenderPresent(gRenderer);
 }
 
-void GameManager::close() {
+void GameManager::close() 
+{
 	// free loaded images
-	gTexture->free();
-	spriteSheet->free();
-	gTexture = nullptr;
-	spriteSheet = nullptr;
+	gTexture.free();
+	spriteSheet.free();
 	
 	// destroy renderer
 	SDL_DestroyRenderer(gRenderer);
@@ -220,7 +234,8 @@ void GameManager::close() {
 	SDL_Quit();
 }
 
-void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces) {
+void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces)
+{
 	for (auto i = 0; i < PIECES; i++)
 	{
 		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;

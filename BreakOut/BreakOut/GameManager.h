@@ -10,6 +10,7 @@
 #include "Ball.h"
 #include "Piece.h"
 #include <array>
+#include "BackgroundMusic.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
 	// The window we will draw to
 	Window window;
 
-	bool loadMedia() const;
+	bool loadMedia();
 
 	// general setup for the game
 	bool init();
@@ -75,6 +76,9 @@ public:
 	int countedFrames = 0;
 
 
+	/* Audio */
+	BackgroundMusic bgMusic;
+
 private:
 	bool mRunning;
 
@@ -82,8 +86,8 @@ private:
 	SDL_Renderer* gRenderer = nullptr;
 	
 	// My own texture class wraper that hold the sprite sheet
-	Texture* spriteSheet = new Texture();
-	Texture* gTexture = new Texture();
+	Texture spriteSheet;
+	Texture gTexture;
 
 	static void initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces);
 };

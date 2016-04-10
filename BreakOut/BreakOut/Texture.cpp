@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <iostream>
 #include <exception>
+#include "ImageNotFound.h"
 
 using namespace std;
 
@@ -31,7 +32,8 @@ int Texture::getHeigth() const {
 }
 
 
-void Texture::render(const float x, const float y, const SDL_Rect* clip, SDL_Renderer* gRenderer) const {
+void Texture::render(const float x, const float y, const SDL_Rect* clip, SDL_Renderer* gRenderer) const 
+{
 	// set the rendering space and render to screen
 	SDL_Rect renderingQuad = { x, y, mWidth, mHeight };
 
@@ -46,33 +48,32 @@ void Texture::render(const float x, const float y, const SDL_Rect* clip, SDL_Ren
 }
 
 
-bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer) {
+bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer) 
+{
 	// the final texture
 	SDL_Texture* texture = nullptr;
-
-	// load image at specified path
-	auto* loadedSurface = IMG_Load(path.c_str());
-
+	
 	try {
+		// load image at specified path
+		auto* loadedSurface = IMG_Load(path.c_str());
+
 		if (loadedSurface == nullptr) {
 			printf("Unable to load image %s SDL_image ERROR: %s\n", path.c_str(), IMG_GetError());
-			throw 99;
-
-		} else{
-
-		// Create texture from surface pixels
-			texture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-			if (texture == nullptr) {
-				printf("Unable to optimize image %s! SDL ERROR %s\n", path.c_str(), SDL_GetError());
-			}
-
-		// get rid of old loaded surface
-			SDL_FreeSurface(loadedSurface);
+			throw ImageNotFound;
 		}
 
-	}catch(int x) {
+		// Create texture from surface pixels
+		texture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+		if (texture == nullptr) {
+			printf("Unable to optimize image %s! SDL ERROR %s\n", path.c_str(), SDL_GetError());
+		}
 
-		cout << "Unable to Load texture, ERROR NUMBER: " << x << endl;
+		// get rid of old loaded surface
+		SDL_FreeSurface(loadedSurface);
+
+	} catch(exception& e) {
+
+		cout << "Unable to Load texture, ERROR NUMBER: " << e.what() << endl;
 	}
 
 	gTexture = texture;
