@@ -6,8 +6,7 @@ GameManager::GameManager(): mRunning(true) {
 	fpsTimer.start();
 }
 
-bool GameManager::loadMedia() 
-{
+bool GameManager::loadMedia() {
 	// load success flag
 	auto success = true;
 	
@@ -25,8 +24,8 @@ bool GameManager::loadMedia()
 	}
 
 	isLoaded = bgMusic.loadMedia();
-	if(!isLoaded)
-	{
+	
+	if(!isLoaded) {
 		printf("Failed to load music\n");
 		success = false;
 	}
@@ -34,8 +33,7 @@ bool GameManager::loadMedia()
 	return success;
 }
 
-bool GameManager::init() 
-{
+bool GameManager::init() {
 	// success flag
 	auto success = true;
 
@@ -78,6 +76,7 @@ bool GameManager::init()
 					printf("SDL_Image could not be initalized, SDL_Image ERROR: %s\n", IMG_GetError());
 					success = false;
 				}
+
 				else {
 					// init SDL_mixer
 					success = bgMusic.init();
@@ -91,25 +90,21 @@ bool GameManager::init()
 	return success;
 }
 
-void GameManager::pause() 
-{
+void GameManager::pause() {
 	bgMusic.pause;
 }
 
-void GameManager::resume() 
-{
+void GameManager::resume() {
 	bgMusic.resume;
 }
 
-void GameManager::handleEvents() 
-{
+void GameManager::handleEvents() {
 	
 	//Handle events on queue
-	while (SDL_PollEvent(&event) != 0)
-	{
+	while (SDL_PollEvent(&event) != 0) {
+		
 		//User requests quit
-		if (event.type == SDL_QUIT)
-		{
+		if (event.type == SDL_QUIT) {
 			mRunning = false;
 		}
 	}
@@ -118,8 +113,8 @@ void GameManager::handleEvents()
 	ball.handleEvent(event);
 }
 
-void GameManager::tick() 
-{
+void GameManager::tick() {
+
 	capTimer.start();
 
 	// Calcuclate delta time
@@ -130,8 +125,8 @@ void GameManager::tick()
 
 	//Calculate and correct fps
 	auto avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
-	if(avgFPS > 2000000)
-	{
+	
+	if(avgFPS > 2000000) {
 		avgFPS = 0;
 	}
 
@@ -150,8 +145,8 @@ void GameManager::tick()
 
 	// Check collision with the pieces
 	for (auto & piece : pieces) {
-		if (piece.isVisible) 
-		{
+		if (piece.isVisible) {
+
 			auto hit = piece.hitByBall(&ball, ballRect);
 			// We do not want to have more than 1 collision per frame
 			if(hit) {
@@ -168,8 +163,7 @@ void GameManager::tick()
 	}
 }
 
-void GameManager::render() 
-{
+void GameManager::render() {
 
 	// Render black background
 	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xff);
@@ -219,8 +213,8 @@ void GameManager::render()
 	SDL_RenderPresent(gRenderer);
 }
 
-void GameManager::close() 
-{
+void GameManager::close() {
+
 	// free loaded images
 	gTexture.free();
 	spriteSheet.free();
@@ -234,10 +228,9 @@ void GameManager::close()
 	SDL_Quit();
 }
 
-void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces)
-{
-	for (auto i = 0; i < PIECES; i++)
-	{
+void GameManager::initBlocks(const array<Piece, sizeof(Piece)*PIECES> pieces) {
+
+	for (auto i = 0; i < PIECES; i++) {
 		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;
 		pieces[i].pieceDimentions->y = i % 5 * pieces[i].pieceDimentions->h;
 	}
