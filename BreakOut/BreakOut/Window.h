@@ -2,7 +2,7 @@
 #include "../packages/sdl2.v140.2.0.4/build/native/include/SDL.h"
 
 const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_HEIGHT = 650;
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1;
 

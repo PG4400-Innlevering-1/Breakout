@@ -47,7 +47,6 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 	if (mPosY < 0)
 	{
 		// entry angle = exit angle
-		mPosY += 0.5;
 		mVelY = -mVelY;
 	}
 	else if (mPosX < 0 || SCREEN_WIDTH < mPosX + mCollider.w)
@@ -55,10 +54,12 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 		// entry angle = exit angle
 		mVelX = -mVelX;
 	}
+	// Ball hits the floor
 	else if (SCREEN_HEIGHT < mPosY + mCollider.h)
 	{
-		mVelX = 0;
-		mVelY = 0;
+		ballsLeft--;
+		isAttached = true;
+		bUpdateHUD = true;
 	}
 	else if (paddle.getPosY() < mPosY + mCollider.h &&
 		paddle.getPosX() < mPosX + mCollider.w / 2 &&
@@ -73,9 +74,6 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 		// reflect in the opposite direction for the y axis
 		mPosY -= 0.5;
 		mVelY = -mVelY;
-
-		// debug printing
-		//printf("mVelX = %f, %f, %f\n", mVelX, pointOnPaddle, mVelY);
 	}
 }
 
@@ -109,13 +107,11 @@ void Ball::addInitialVelocity()
 
 void Ball::invertY() 
 {
-	mPosY -= mVelY * mTinyOffset;
 	mVelY = -mVelY;
 }
 
 void Ball::invertX()
 {
-	mPosX -= mVelX * mTinyOffset;
 	mVelX = -mVelX;
 }
 
@@ -127,11 +123,17 @@ void Ball::handleEvent(const SDL_Event e)
 		switch (e.key.keysym.sym)
 		{
 			case SDLK_UP:
-			addInitialVelocity();		
-			break;
+				addInitialVelocity();		
+				break;
 		}
 	}
 }
+
+void Ball::attachBall()
+{
+	isAttached = true;
+}
+
 
 Ball::~Ball()
 {

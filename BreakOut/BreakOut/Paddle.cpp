@@ -1,5 +1,5 @@
 #include "Paddle.h"
-#include "Window.h"
+
 
 Paddle::Paddle()
 {
@@ -58,17 +58,28 @@ void Paddle::move(double deltaTime)
 
 void Paddle::movePaddleLeft()
 {
-	if(mPosX >= 0)
+	 if(mPosX > 0)
 	{
-		mVelX -= VELOCITY;
+		mVelX = -VELOCITY;
+	} 
+
+	if(mPosX <= 0)
+	{
+		mVelX = 0;
 	}
 }
 
 void Paddle::movePaddleRight()
 {
-	if (mPosX + paddleDimentions->w <= SCREEN_WIDTH)
+	if (mPosX + paddleDimentions->w < SCREEN_WIDTH)
 	{
-		mVelX += VELOCITY;
+		mVelX = VELOCITY;
+	}
+
+	// Paddle has hit a wall
+	if(mPosX + paddleDimentions->w >= SCREEN_WIDTH)
+	{
+		mVelX = 0;
 	}
 }
 
@@ -77,24 +88,19 @@ void Paddle::free() const
 	delete paddleDimentions;
 }
 
-void Paddle::handleEvent(const SDL_Event e)
+void Paddle::handleEvent(const InputManager input)
 {
-	// if a key was pressed
-	if(e.type == SDL_KEYDOWN)
+	// state snapshot
+	if(input.keys[SDL_SCANCODE_LEFT])
+	{ 
+		movePaddleLeft();
+	}
+	else if(input.keys[SDL_SCANCODE_RIGHT])
 	{
-		switch(e.key.keysym.sym)
-		{
-		case SDLK_LEFT:
-			movePaddleLeft();
-			break;
-		case SDLK_RIGHT:
-			movePaddleRight();
-			break;
-		} 
-	}  
+		movePaddleRight();
+	}
 	else
 	{
 		mVelX = 0;
 	}
-	
 }

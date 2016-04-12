@@ -12,6 +12,9 @@ int main(int argc, char* argv[])
 	// load the textures into memory, return error if fail
 	if (!game.loadMedia()) return 1;
 
+	// Setup of the basic game components
+	game.updateHUD();
+
 	// Main loop, input/update/draw
 	while(game.running())
 	{

@@ -3,7 +3,8 @@
 #include <SDL_image.h>
 #include <iostream>
 #include <exception>
-#include "ImageNotFound.h"
+#include "ImageNotFoundException.h"
+#include "UnableToOptimizeImageException.h";
 
 using namespace std;
 
@@ -47,34 +48,28 @@ void Texture::render(const float x, const float y, const SDL_Rect* clip, SDL_Ren
 	SDL_RenderCopy(gRenderer, gTexture, clip, &renderingQuad);
 }
 
-
+// Demonstrating exeption handling by making my own exeptions
 bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer) 
 {
 	// the final texture
 	SDL_Texture* texture = nullptr;
 	
-	try {
-		// load image at specified path
-		auto* loadedSurface = IMG_Load(path.c_str());
-
-		if (loadedSurface == nullptr) {
-			printf("Unable to load image %s SDL_image ERROR: %s\n", path.c_str(), IMG_GetError());
-			throw ImageNotFound;
-		}
-
-		// Create texture from surface pixels
-		texture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-		if (texture == nullptr) {
-			printf("Unable to optimize image %s! SDL ERROR %s\n", path.c_str(), SDL_GetError());
-		}
-
-		// get rid of old loaded surface
-		SDL_FreeSurface(loadedSurface);
-
-	} catch(exception& e) {
-
-		cout << "Unable to Load texture, ERROR NUMBER: " << e.what() << endl;
+	// load image at specified path
+	auto* loadedSurface = IMG_Load(path.c_str());
+	if (loadedSurface == nullptr) 
+	{	
+		throw ImageNotFoundException;
 	}
+
+	// Create texture from surface pixels
+	texture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+	if (texture == nullptr) 
+	{
+		throw UnableToOptimizeImageException; 
+	}
+
+	// get rid of old loaded surface
+	SDL_FreeSurface(loadedSurface);
 
 	gTexture = texture;
 

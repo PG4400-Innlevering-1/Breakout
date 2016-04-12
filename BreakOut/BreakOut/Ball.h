@@ -8,6 +8,10 @@ public:
 	Ball();
 	~Ball();
 
+	// Aka lives
+	int ballsLeft = 3;
+	bool bUpdateHUD = true;
+
 	SDL_Rect mCollider;
 
 	float getPosX() const;
@@ -24,6 +28,9 @@ public:
 	void invertY();
 	void invertX();
 
+	int getLivesLeft() const { return ballsLeft; };
+
+	void attachBall();
 	
 private:
 	float mBallSpeed;

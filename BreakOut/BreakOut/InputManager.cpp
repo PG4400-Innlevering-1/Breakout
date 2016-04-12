@@ -4,6 +4,8 @@
 
 InputManager::InputManager()
 {
+	// Initialiser key state-pekeren
+	keys = SDL_GetKeyboardState(&numKeys);
 }
 
 

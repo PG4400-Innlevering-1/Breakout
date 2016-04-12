@@ -1,5 +1,7 @@
 #pragma once
 #include "Texture.h"
+#include "InputManager.h"
+#include "Window.h"
 
 class Paddle
 {
@@ -9,19 +11,18 @@ public:
 
 	SDL_Rect* paddleDimentions = new SDL_Rect();
 
-	const float VELOCITY =	10;
+	const float VELOCITY = 1000;
 
 	float getPosX() const;
 	float getPosY() const;
 	float getVelX() const;
 	float getVelY() const;
 
-
 	void move(double deltaTime);
 
 	void free() const;
 
-	void handleEvent(const SDL_Event e);
+	void handleEvent(const InputManager input);
 
 	void movePaddleRight();
 	void movePaddleLeft();

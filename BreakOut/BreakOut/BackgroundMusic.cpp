@@ -9,16 +9,6 @@ BackgroundMusic::BackgroundMusic()
 
 BackgroundMusic::~BackgroundMusic()
 {
-	//Free the sound effects
-	Mix_FreeChunk(gScratch);
-	Mix_FreeChunk(gHigh);
-	Mix_FreeChunk(gMedium);
-	Mix_FreeChunk(gLow);
-	gScratch = nullptr;
-	gHigh = nullptr;
-	gMedium = nullptr;
-	gLow = nullptr;
-
 	//Free the music
 	Mix_FreeMusic(gMusic);
 	gMusic = nullptr;
@@ -46,17 +36,17 @@ bool BackgroundMusic::loadMedia()
 	{
 		printf("Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError());
 		success = false;
-	}else
+	}
+	else
 	{
 		play();
 	}
-
 	return success;
 }
 
 void BackgroundMusic::play() const
 {
-	Mix_PlayMusic(gMusic, 1);
+	Mix_PlayMusic(gMusic, -1);
 }
 
 void BackgroundMusic::pause()

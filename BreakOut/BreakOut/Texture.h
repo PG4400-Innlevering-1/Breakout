@@ -22,7 +22,6 @@ public:
 	// loads the image
 	bool loadTexture(const std::string path, SDL_Renderer* gRenderer);
 
-
 private:
 	// image dimentions
 	int mWidth;

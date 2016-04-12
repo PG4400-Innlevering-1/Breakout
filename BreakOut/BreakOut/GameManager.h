@@ -11,6 +11,9 @@
 #include "Piece.h"
 #include <array>
 #include "BackgroundMusic.h"
+#include "InputManager.h"
+#include "TextRender.h"
+#include "HUDManager.h"
 
 using namespace std;
 
@@ -34,6 +37,9 @@ public:
 	// no longer paused
 	void resume();
 
+	// Update the UI/HUD
+	void updateHUD();
+	
 	// handle input
 	void handleEvents();
 
@@ -63,7 +69,7 @@ public:
 	array<Piece, sizeof(Piece)*PIECES> pieces;
 
 	// Game timers
-	typedef std::chrono::high_resolution_clock hr_clock;
+	typedef chrono::high_resolution_clock hr_clock;
 	typedef hr_clock::time_point time_point;	typedef hr_clock::duration duration;
 	time_point currentFrame = hr_clock::now();	Uint32 startTime;	float deltaTime;
 
@@ -75,9 +81,15 @@ public:
 
 	int countedFrames = 0;
 
+	// Input Manager
+	InputManager inputManager;
 
-	/* Audio */
+	// Audio
 	BackgroundMusic bgMusic;
+	
+	// Screen Text HUD
+	TextRender textRender;
+	
 
 private:
 	bool mRunning;
@@ -89,6 +101,11 @@ private:
 	Texture spriteSheet;
 	Texture gTexture;
 
-	static void initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces);
+	int level = 0;
+	int totalBlocksDestroyed = 0;
+
+	void nextLevel();
+
+	static void initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int level);
 };
 
