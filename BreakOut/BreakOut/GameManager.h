@@ -10,10 +10,9 @@
 #include "Ball.h"
 #include "Piece.h"
 #include <array>
-#include "BackgroundMusic.h"
-#include "InputManager.h"
 #include "TextRender.h"
-#include "HUDManager.h"
+#include "BackgroundMusic.h"
+
 
 using namespace std;
 
@@ -25,6 +24,10 @@ public:
 
 	// The window we will draw to
 	Window window;
+
+	int getScore();
+
+	void setScore (int score);
 
 	bool loadMedia();
 
@@ -70,8 +73,12 @@ public:
 
 	// Game timers
 	typedef chrono::high_resolution_clock hr_clock;
-	typedef hr_clock::time_point time_point;	typedef hr_clock::duration duration;
-	time_point currentFrame = hr_clock::now();	Uint32 startTime;	float deltaTime;
+	typedef hr_clock::time_point time_point;
+	typedef hr_clock::duration duration;
+	time_point currentFrame = hr_clock::now();
+
+	Uint32 startTime;
+	float deltaTime;
 
 	//The frames per second timer
 	Timer fpsTimer;
@@ -91,6 +98,8 @@ public:
 	TextRender textRender;
 	
 
+	int score = 0;
+
 private:
 	bool mRunning;
 
@@ -103,6 +112,7 @@ private:
 
 	int level = 0;
 	int totalBlocksDestroyed = 0;
+	
 
 	void nextLevel();
 

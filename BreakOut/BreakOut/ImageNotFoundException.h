@@ -7,6 +7,6 @@ class ImageNotFoundException : public exception
 {
 	const char* what() const throw() override
 	{
-		return "Unable to optimize image SDL ERROR";
+		return "Unable to load image SDL_image";
 	}
 } ImageNotFoundException;

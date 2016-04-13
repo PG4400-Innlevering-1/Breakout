@@ -30,3 +30,7 @@ bool Piece::hitByBall(Ball *ball, const SDL_Rect rect)
 	return collision;
 }
 
+void Piece::free()
+{
+	delete pieceDimentions;
+}

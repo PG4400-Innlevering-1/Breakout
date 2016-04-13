@@ -8,6 +8,6 @@ class UnableToOptimizeImageException : public exception
 {
 	const char* what() const throw() override
 	{
-		return "Unable to load image SDL_image";
+		return "Unable to optimize image SDL ERROR";
 	}
 } UnableToOptimizeImageException;

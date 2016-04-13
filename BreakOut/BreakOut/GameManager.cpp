@@ -116,13 +116,15 @@ void GameManager::pause()
 	bgMusic.pause;
 }
 
-void GameManager::resume()
+void GameManager::resume() 
 {
 	bgMusic.resume;
 }
 
 void GameManager::updateHUD()
+
 {
+	int score = getScore();
 	if (ball.bUpdateHUD)
 	{
 		ball.bUpdateHUD = false;
@@ -133,7 +135,8 @@ void GameManager::updateHUD()
 			str += "<3";
 		}
 
-		textRender.loadTTF_FromString(gRenderer, "Lives: " + str, color);
+		textRender.loadTTF_FromString(gRenderer, "Lives: " + str + "Score: " + to_string(score), color);
+		
 	}
 }
 
@@ -196,6 +199,8 @@ void GameManager::tick()
 			// We do not want to have more than 1 collision per frame
 			if (hit) {
 				totalBlocksDestroyed++;
+				score++;
+				setScore(score);
 				break;
 			}
 		}
@@ -250,7 +255,7 @@ void GameManager::render()
 	SDL_RenderFillRect(gRenderer, &rect);
 
 	// render the paddle
-	spriteSheet.render(paddle.getPosX(), paddle.getPosY(), paddle.paddleDimentions, gRenderer);
+	spriteSheet.render(paddle.getPosX(), paddle.getPosY(), &paddle.paddleDimentions, gRenderer);
 
 	// render the ball
 	spriteSheet.render(ball.getPosX(), ball.getPosY(), &ball.mCollider, gRenderer);
@@ -260,24 +265,24 @@ void GameManager::render()
 	// render pieces
 	for (auto i = 0; i < PIECES; i++)
 	{
-		switch (i % 5)
+		switch (level % 5)
 		{
-		case 0:
+			case 0:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 255, 255);
 			break;
-		case 1:
+			case 1:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
 			break;
-		case 2:
+			case 2:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 0, 255);
 			break;
-		case 3:
+			case 3:
 			SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
 			break;
-		case 4:
+			case 4:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 255, 255);
 			break;
-		default:
+			default:
 			SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 			break;
 		}
@@ -321,18 +326,23 @@ void GameManager::nextLevel()
 	{
 		piece.isVisible = true;
 	}
-
-	initBlocks(pieces, level);
 }
 
 void GameManager::initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int level)
 {
-	for (auto i = level; i < PIECES; i++)
+	// 16 pieces per row in 5 rows
+	for (auto i = 0; i < PIECES; i++)
 	{
 		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;
 		pieces[i].pieceDimentions->y = i % 5 * pieces[i].pieceDimentions->h;
 	}
 }
+
+void setScore (int n_score) 
+{
+	n_score = score;
+}
+
 
 GameManager::~GameManager()
 {

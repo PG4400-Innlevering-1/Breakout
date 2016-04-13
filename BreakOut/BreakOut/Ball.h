@@ -43,5 +43,7 @@ private:
 
 	bool isAttached;
 
+	float velocity = 200;
+
 };
 
