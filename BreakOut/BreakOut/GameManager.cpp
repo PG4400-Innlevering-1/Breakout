@@ -200,7 +200,7 @@ void GameManager::tick()
 			if (hit) {
 				totalBlocksDestroyed++;
 				score++;
-				updateScore(score);
+				setScore(score);
 				break;
 			}
 		}
@@ -337,6 +337,11 @@ void GameManager::initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int leve
 		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;
 		pieces[i].pieceDimentions->y = i % 5 * pieces[i].pieceDimentions->h;
 	}
+}
+
+void setScore (int n_score) 
+{
+	n_score = score;
 }
 
 int getScore() 
