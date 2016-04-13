@@ -1,1 +1,4 @@
-﻿  BreakOut.vcxproj -> C:\Users\Edvin\Google Drive\Breakout\BreakOut\BreakOut.exe
+﻿  Paddle.cpp
+c:\users\edvin\google drive\breakout\breakout\breakout\paddle.cpp(46): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\edvin\google drive\breakout\breakout\breakout\paddle.cpp(55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  BreakOut.vcxproj -> C:\Users\Edvin\Google Drive\Breakout\BreakOut\BreakOut.exe

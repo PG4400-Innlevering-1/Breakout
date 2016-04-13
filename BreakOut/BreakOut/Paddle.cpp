@@ -60,7 +60,7 @@ void Paddle::movePaddleLeft()
 {
 	 if(mPosX > 0)
 	{
-		mVelX = -VELOCITY;
+		mVelX -= VELOCITY;
 	} 
 
 	if(mPosX <= 0)
@@ -73,7 +73,7 @@ void Paddle::movePaddleRight()
 {
 	if (mPosX + paddleDimentions->w < SCREEN_WIDTH)
 	{
-		mVelX = VELOCITY;
+		mVelX += VELOCITY;
 	}
 
 	// Paddle has hit a wall

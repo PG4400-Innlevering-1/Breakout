@@ -8,6 +8,7 @@ GameManager::GameManager() : mRunning(true) {
 	fpsTimer.start();
 }
 
+
 bool GameManager::loadMedia()
 {
 	// load success flag
@@ -28,15 +29,15 @@ bool GameManager::loadMedia()
 		success = false;
 	}
 
+
 	isLoaded = textRender.loadFont();
-	if(!isLoaded)
+	if (!isLoaded)
 	{
 		printf("Failed to load the font");
-		success = false;
 	}
-
 	return success;
 }
+
 
 bool GameManager::init()
 {
@@ -88,8 +89,7 @@ bool GameManager::init()
 					printf("SDL_Image could not be initalized, SDL_Image ERROR: %s\n", IMG_GetError());
 					success = false;
 				}
-				else
-				{
+				else {
 					// init SDL_mixer
 					success = bgMusic.init();
 				}
@@ -109,6 +109,7 @@ bool GameManager::init()
 
 	return success;
 }
+
 
 void GameManager::pause()
 {
@@ -136,16 +137,16 @@ void GameManager::updateHUD()
 	}
 }
 
+
 void GameManager::handleEvents()
 {
 	SDL_PumpEvents();
 
 	//Handle events on queue
-	while (SDL_PollEvent(&event) != 0)
-	{
+	while (SDL_PollEvent(&event) != 0) {
+		
 		//User requests quit
-		if (event.type == SDL_QUIT)
-		{
+		if (event.type == SDL_QUIT) {
 			mRunning = false;
 		}
 	}
@@ -153,6 +154,7 @@ void GameManager::handleEvents()
 	paddle.handleEvent(inputManager);
 	ball.handleEvent(event);
 }
+
 
 void GameManager::tick()
 {
@@ -168,55 +170,68 @@ void GameManager::tick()
 	auto avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
 	if (avgFPS > 2000000)
 	{
-		avgFPS = 0;
-	}
 
-	/***************
-	* Movement
-	****************/
 
-	paddle.move(deltaTime);
-	ball.move(paddle, deltaTime);
+		if (avgFPS > 2000000) {
 
-	SDL_Rect ballRect;
-	ballRect.x = ball.getPosX();
-	ballRect.y = ball.getPosY();
-	ballRect.w = ball.mCollider.w;
-	ballRect.h = ball.mCollider.h;
+			avgFPS = 0;
+		}
 
-	// Check collision with the pieces
-	for (auto & piece : pieces) 
-	{
-		if (piece.isVisible)
+		/***************
+		* Movement
+		****************/
+
+		paddle.move(deltaTime);
+		ball.move(paddle, deltaTime);
+
+		SDL_Rect ballRect;
+		ballRect.x = ball.getPosX();
+		ballRect.y = ball.getPosY();
+		ballRect.w = ball.mCollider.w;
+		ballRect.h = ball.mCollider.h;
+
+		// Check collision with the pieces
+
+		for (auto & piece : pieces)
 		{
-			auto hit = piece.hitByBall(&ball, ballRect);
-			// We do not want to have more than 1 collision per frame
-			if (hit) {
-				totalBlocksDestroyed++;
-				break;
+			if (piece.isVisible)
+			{
+
+				for (auto & piece : pieces)
+				{
+					if (piece.isVisible)
+					{
+						auto hit = piece.hitByBall(&ball, ballRect);
+						// We do not want to have more than 1 collision per frame
+						if (hit) {
+							totalBlocksDestroyed++;
+							break;
+						}
+					}
+				}
+
+				if (totalBlocksDestroyed == PIECES)
+				{
+					nextLevel();
+				}
+
+				// Update the Game HUD
+				updateHUD();
+
+				// Game over
+				if (ball.getLivesLeft() == 0)
+				{
+					quit();
+				}
+
+				int frameTicks = capTimer.getTicks();
+				if (frameTicks < SCREEN_TICKS_PER_FRAME)
+				{
+					// wait the remaining time
+					SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
+				}
 			}
 		}
-	}
-
-	if(totalBlocksDestroyed == PIECES)
-	{
-		nextLevel();
-	}
-
-	// Update the Game HUD
-	updateHUD();
-
-	// Game over
-	if(ball.getLivesLeft() == 0)
-	{
-		quit();
-	}
-
-	int frameTicks = capTimer.getTicks();
-	if (frameTicks < SCREEN_TICKS_PER_FRAME) 
-	{
-		// wait the remaining time
-		SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
 	}
 }
 
@@ -288,8 +303,10 @@ void GameManager::render()
 	SDL_RenderPresent(gRenderer);
 }
 
-void GameManager::close()
-{
+
+void GameManager::close() {
+
+
 	// free loaded images
 	gTexture.free();
 	spriteSheet.free();
@@ -329,5 +346,4 @@ void GameManager::initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int leve
 
 GameManager::~GameManager()
 {
-
 }
