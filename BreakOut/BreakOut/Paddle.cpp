@@ -60,7 +60,7 @@ void Paddle::movePaddleLeft()
 {
 	 if(mPosX > 0)
 	{
-		mVelX -= VELOCITY;
+		mVelX = -VELOCITY;
 	} 
 
 	if(mPosX <= 0)
@@ -73,7 +73,7 @@ void Paddle::movePaddleRight()
 {
 	if (mPosX + paddleDimentions->w < SCREEN_WIDTH)
 	{
-		mVelX += VELOCITY;
+		mVelX = VELOCITY;
 	}
 
 	// Paddle has hit a wall
@@ -91,11 +91,11 @@ void Paddle::free() const
 void Paddle::handleEvent(const InputManager input)
 {
 	// state snapshot
-	if(input.keys[SDL_SCANCODE_LEFT])
+	if(input.keys[SDL_SCANCODE_LEFT] != 0)
 	{ 
 		movePaddleLeft();
 	}
-	else if(input.keys[SDL_SCANCODE_RIGHT])
+	else if(input.keys[SDL_SCANCODE_RIGHT] != 0)
 	{
 		movePaddleRight();
 	}

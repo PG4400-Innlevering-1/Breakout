@@ -15,7 +15,7 @@ bool GameManager::loadMedia()
 	auto success = true;
 
 	bool isLoaded;
-	
+
 	isLoaded = spriteSheet.loadTexture("res/breakout_sprites.png", gRenderer);
 	if (!isLoaded) {
 		printf("Failed to load sprite sheet image\n");
@@ -123,7 +123,7 @@ void GameManager::resume()
 
 void GameManager::updateHUD()
 {
-	if(ball.bUpdateHUD)
+	if (ball.bUpdateHUD)
 	{
 		ball.bUpdateHUD = false;
 		SDL_Color color{ color.r = 0xff, color.g = 0xff, color.b = 0xff, color.a = 0xff };
@@ -140,11 +140,11 @@ void GameManager::updateHUD()
 
 void GameManager::handleEvents()
 {
-	SDL_PumpEvents();
+
 
 	//Handle events on queue
 	while (SDL_PollEvent(&event) != 0) {
-		
+
 		//User requests quit
 		if (event.type == SDL_QUIT) {
 			mRunning = false;
@@ -168,72 +168,62 @@ void GameManager::tick()
 
 	//Calculate and correct fps
 	auto avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
-	if (avgFPS > 2000000)
+
+	if (avgFPS > 2000000) {
+
+		avgFPS = 0;
+	}
+
+	/***************
+	* Movement
+	****************/
+
+	paddle.move(deltaTime);
+	ball.move(paddle, deltaTime);
+
+	SDL_Rect ballRect;
+	ballRect.x = ball.getPosX();
+	ballRect.y = ball.getPosY();
+	ballRect.w = ball.mCollider.w;
+	ballRect.h = ball.mCollider.h;
+
+	// Check collision with the pieces
+	for (auto & piece : pieces)
 	{
-
-
-		if (avgFPS > 2000000) {
-
-			avgFPS = 0;
-		}
-
-		/***************
-		* Movement
-		****************/
-
-		paddle.move(deltaTime);
-		ball.move(paddle, deltaTime);
-
-		SDL_Rect ballRect;
-		ballRect.x = ball.getPosX();
-		ballRect.y = ball.getPosY();
-		ballRect.w = ball.mCollider.w;
-		ballRect.h = ball.mCollider.h;
-
-		// Check collision with the pieces
-
-		for (auto & piece : pieces)
+		if (piece.isVisible)
 		{
-			if (piece.isVisible)
-			{
-
-				for (auto & piece : pieces)
-				{
-					if (piece.isVisible)
-					{
-						auto hit = piece.hitByBall(&ball, ballRect);
-						// We do not want to have more than 1 collision per frame
-						if (hit) {
-							totalBlocksDestroyed++;
-							break;
-						}
-					}
-				}
-
-				if (totalBlocksDestroyed == PIECES)
-				{
-					nextLevel();
-				}
-
-				// Update the Game HUD
-				updateHUD();
-
-				// Game over
-				if (ball.getLivesLeft() == 0)
-				{
-					quit();
-				}
-
-				int frameTicks = capTimer.getTicks();
-				if (frameTicks < SCREEN_TICKS_PER_FRAME)
-				{
-					// wait the remaining time
-					SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
-				}
+			auto hit = piece.hitByBall(&ball, ballRect);
+			// We do not want to have more than 1 collision per frame
+			if (hit) {
+				totalBlocksDestroyed++;
+				break;
 			}
 		}
 	}
+
+	if (totalBlocksDestroyed == PIECES)
+	{
+		nextLevel();
+	}
+
+	// Update the Game HUD
+	updateHUD();
+
+	// Game over
+	if (ball.getLivesLeft() == 0)
+	{
+		quit();
+	}
+
+	int frameTicks = capTimer.getTicks();
+	if (frameTicks < SCREEN_TICKS_PER_FRAME)
+	{
+		// wait the remaining time
+		SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
+	}
+
 }
+
 
 void GameManager::render()
 {
@@ -244,19 +234,19 @@ void GameManager::render()
 	auto random3 = static_cast<double>(rand()) / (RAND_MAX)+1;
 
 	// Render background
-	SDL_SetRenderDrawColor(gRenderer, 
+	SDL_SetRenderDrawColor(gRenderer,
 		random1 * 255,
 		random2 * 255,
 		random3 * 255,
 		0xff
-	);
+		);
 
 	// Clear the screen
 	SDL_RenderClear(gRenderer);
 
 	// render the bottom bar
 	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xff);
-	SDL_Rect rect { rect.x = 0, rect.y = SCREEN_HEIGHT - 50, rect.h = 50, rect.w = SCREEN_WIDTH };
+	SDL_Rect rect{ rect.x = 0, rect.y = SCREEN_HEIGHT - 50, rect.h = 50, rect.w = SCREEN_WIDTH };
 	SDL_RenderFillRect(gRenderer, &rect);
 
 	// render the paddle
@@ -327,7 +317,7 @@ void GameManager::nextLevel()
 	totalBlocksDestroyed = 0;
 	level++;
 	ball.attachBall();
-	for(auto & piece : pieces)
+	for (auto & piece : pieces)
 	{
 		piece.isVisible = true;
 	}
