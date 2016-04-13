@@ -27,6 +27,8 @@ public:
 
 	int getScore();
 
+	void setScore (int score);
+
 	bool loadMedia();
 
 	// general setup for the game
@@ -97,7 +99,7 @@ public:
 	
 
 	int score = 0;
-	
+
 private:
 	bool mRunning;
 
