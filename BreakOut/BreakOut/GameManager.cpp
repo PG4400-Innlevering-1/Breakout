@@ -116,7 +116,7 @@ void GameManager::pause()
 	bgMusic.pause;
 }
 
-void GameManager::resume()
+void GameManager::resume() 
 {
 	bgMusic.resume;
 }
