@@ -1,6 +1,8 @@
 #pragma once
+#include <cstdio>
 #include <SDL.h>
 #include "Window.h"
+#include "MediaManager.h"
 #include "Texture.h"
 #include "Paddle.h"
 #include <chrono>
@@ -8,9 +10,9 @@
 #include "Ball.h"
 #include "Piece.h"
 #include <array>
-#include "BackgroundMusic.h"
-#include "InputManager.h"
 #include "TextRender.h"
+#include "BackgroundMusic.h"
+
 
 using namespace std;
 
@@ -22,6 +24,8 @@ public:
 
 	// The window we will draw to
 	Window window;
+
+	int getScore();
 
 	bool loadMedia();
 
@@ -92,6 +96,8 @@ public:
 	TextRender textRender;
 	
 
+	int score = 0;
+	
 private:
 	bool mRunning;
 
@@ -104,6 +110,7 @@ private:
 
 	int level = 0;
 	int totalBlocksDestroyed = 0;
+	
 
 	void nextLevel();
 
