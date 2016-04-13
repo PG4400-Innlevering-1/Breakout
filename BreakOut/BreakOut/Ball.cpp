@@ -47,7 +47,7 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 	if (mPosY < 0)
 	{
 		// entry angle = exit angle
-		mVelY = -mVelY;
+		mVelY = velocity;
 	}
 	else if (mPosX < 0 || SCREEN_WIDTH < mPosX + mCollider.w)
 	{
@@ -63,7 +63,7 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 	}
 	else if (paddle.getPosY() < mPosY + mCollider.h &&
 		paddle.getPosX() < mPosX + mCollider.w / 2 &&
-		paddle.getPosX() + paddle.paddleDimentions->w > mPosX + mCollider.w / 2)
+		paddle.getPosX() + paddle.paddleDimentions.w > mPosX + mCollider.w / 2)
 	{
 		// returns the point from 22.5 - 157.2 on the paddle left to right
 		float pointOnPaddle = mPosX + (mCollider.w / 2) + 22.5 - paddle.getPosX();

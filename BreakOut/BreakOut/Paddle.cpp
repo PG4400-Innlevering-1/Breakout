@@ -3,10 +3,10 @@
 
 Paddle::Paddle()
 {
-	paddleDimentions->h = 30;
-	paddleDimentions->w = 135;
-	paddleDimentions->x = 0;
-	paddleDimentions->y = 280;
+	paddleDimentions.h = 30;
+	paddleDimentions.w = 135;
+	paddleDimentions.x = 0;
+	paddleDimentions.y = 280;
 
 	mPosX = (SCREEN_WIDTH / 2) - (135 / 2);
 	mPosY = 570;
@@ -50,9 +50,9 @@ void Paddle::move(double deltaTime)
 	{
 		mPosX = 0;
 	}
-	else if(mPosX + paddleDimentions->w > SCREEN_WIDTH)
+	else if(mPosX + paddleDimentions.w > SCREEN_WIDTH)
 	{
-		mPosX = SCREEN_WIDTH - paddleDimentions->w;
+		mPosX = SCREEN_WIDTH - paddleDimentions.w;
 	}
 }
 
@@ -71,22 +71,18 @@ void Paddle::movePaddleLeft()
 
 void Paddle::movePaddleRight()
 {
-	if (mPosX + paddleDimentions->w < SCREEN_WIDTH)
+	if (mPosX + paddleDimentions.w < SCREEN_WIDTH)
 	{
 		mVelX = VELOCITY;
 	}
 
 	// Paddle has hit a wall
-	if(mPosX + paddleDimentions->w >= SCREEN_WIDTH)
+	if(mPosX + paddleDimentions.w >= SCREEN_WIDTH)
 	{
 		mVelX = 0;
 	}
 }
 
-void Paddle::free() const
-{
-	delete paddleDimentions;
-}
 
 void Paddle::handleEvent(const InputManager input)
 {

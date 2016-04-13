@@ -196,6 +196,7 @@ void GameManager::tick()
 			// We do not want to have more than 1 collision per frame
 			if (hit) {
 				totalBlocksDestroyed++;
+
 				break;
 			}
 		}
@@ -250,7 +251,7 @@ void GameManager::render()
 	SDL_RenderFillRect(gRenderer, &rect);
 
 	// render the paddle
-	spriteSheet.render(paddle.getPosX(), paddle.getPosY(), paddle.paddleDimentions, gRenderer);
+	spriteSheet.render(paddle.getPosX(), paddle.getPosY(), &paddle.paddleDimentions, gRenderer);
 
 	// render the ball
 	spriteSheet.render(ball.getPosX(), ball.getPosY(), &ball.mCollider, gRenderer);
@@ -260,7 +261,7 @@ void GameManager::render()
 	// render pieces
 	for (auto i = 0; i < PIECES; i++)
 	{
-		switch (i % 5)
+		switch (level % 5)
 		{
 		case 0:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 255, 255);
@@ -321,13 +322,12 @@ void GameManager::nextLevel()
 	{
 		piece.isVisible = true;
 	}
-
-	initBlocks(pieces, level);
 }
 
 void GameManager::initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int level)
 {
-	for (auto i = level; i < PIECES; i++)
+	// 16 pieces per row in 5 rows
+	for (auto i = 0; i < PIECES; i++)
 	{
 		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;
 		pieces[i].pieceDimentions->y = i % 5 * pieces[i].pieceDimentions->h;

@@ -4,7 +4,7 @@
 
 const int PIECES = 80;
 
-class Piece
+class Piece 
 {
 public:
 	Piece();
@@ -15,6 +15,8 @@ public:
 	bool isVisible = true;
 
 	bool hitByBall(Ball* ball, const SDL_Rect rect);
-	
+
+
+	void free();
 };
 
