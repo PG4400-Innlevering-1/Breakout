@@ -122,7 +122,9 @@ void GameManager::resume()
 }
 
 void GameManager::updateHUD()
+
 {
+	int score = getScore();
 	if (ball.bUpdateHUD)
 	{
 		ball.bUpdateHUD = false;
@@ -133,7 +135,8 @@ void GameManager::updateHUD()
 			str += "<3";
 		}
 
-		textRender.loadTTF_FromString(gRenderer, "Lives: " + str, color);
+		textRender.loadTTF_FromString(gRenderer, "Lives: " + str + "Score: " + score, color);
+		
 	}
 }
 
@@ -196,6 +199,8 @@ void GameManager::tick()
 			// We do not want to have more than 1 collision per frame
 			if (hit) {
 				totalBlocksDestroyed++;
+				score++;
+				updateScore(score);
 				break;
 			}
 		}
@@ -262,22 +267,22 @@ void GameManager::render()
 	{
 		switch (i % 5)
 		{
-		case 0:
+			case 0:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 255, 255);
 			break;
-		case 1:
+			case 1:
 			SDL_SetRenderDrawColor(gRenderer, 255, 0, 0, 255);
 			break;
-		case 2:
+			case 2:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 0, 255);
 			break;
-		case 3:
+			case 3:
 			SDL_SetRenderDrawColor(gRenderer, 0, 0, 255, 255);
 			break;
-		case 4:
+			case 4:
 			SDL_SetRenderDrawColor(gRenderer, 0, 255, 255, 255);
 			break;
-		default:
+			default:
 			SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
 			break;
 		}
@@ -332,6 +337,11 @@ void GameManager::initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int leve
 		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;
 		pieces[i].pieceDimentions->y = i % 5 * pieces[i].pieceDimentions->h;
 	}
+}
+
+int getScore() 
+{
+	return score;
 }
 
 GameManager::~GameManager()
