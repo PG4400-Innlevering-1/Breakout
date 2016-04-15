@@ -2,14 +2,14 @@
 
 
 
-TextRender::TextRender()
+TextRender::TextRender() : mWidth(0), mHeight(0)
 {
 }
 
 
 TextRender::~TextRender()
 { 
-
+	//TTF_CloseFont(font);
 }
 
 
@@ -75,4 +75,16 @@ void TextRender::render(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, do
 
 	//Render to screen
 	SDL_RenderCopyEx(renderer, mTexture, clip, &renderQuad, angle, center, flip);
+}
+
+
+void TextRender::free()
+{
+	if (mTexture != nullptr)
+	{
+		SDL_DestroyTexture(mTexture);
+		mTexture = nullptr;
+		mWidth = 0;
+		mHeight = 0;
+	}
 }

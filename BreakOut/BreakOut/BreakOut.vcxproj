@@ -172,6 +172,7 @@
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="TextRender.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="MediaManager.cpp" />
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="TextRender.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />

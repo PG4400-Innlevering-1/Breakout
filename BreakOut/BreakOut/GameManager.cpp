@@ -1,4 +1,4 @@
-#include <stdexcept>
+﻿#include <stdexcept>
 #include "GameManager.h"
 #include "../packages/sdl2_image.v140.2.0.1/build/native/include/SDL_image.h"
 #include <iostream>
@@ -122,29 +122,22 @@ void GameManager::resume()
 }
 
 void GameManager::updateHUD()
-
 {
-	int score = getScore();
-	if (ball.bUpdateHUD)
-	{
-		ball.bUpdateHUD = false;
-		SDL_Color color{ color.r = 0xff, color.g = 0xff, color.b = 0xff, color.a = 0xff };
-		string str = "";
-		for (auto i = 0; i < ball.getLivesLeft(); i++)
-		{
-			str += "<3";
-		}
+	SDL_Color color{ color.r = 0xff, color.g = 0xff, color.b = 0xff, color.a = 0xff };
+	string str = "";
 
-		textRender.loadTTF_FromString(gRenderer, "Lives: " + str + "Score: " + to_string(score), color);
-		
+	for (auto i = 0; i < ball.getLivesLeft(); i++)
+	{
+		str += "<3";
 	}
+
+	textRender.free(); // Free the previous texture to avoid memory leak
+	textRender.loadTTF_FromString(gRenderer, "Lives: " + str + "    Score: " + to_string(score.getScore()), color);			
 }
 
 
 void GameManager::handleEvents()
 {
-
-
 	//Handle events on queue
 	while (SDL_PollEvent(&event) != 0) {
 
@@ -199,25 +192,23 @@ void GameManager::tick()
 			// We do not want to have more than 1 collision per frame
 			if (hit) {
 				totalBlocksDestroyed++;
-				score++;
-				setScore(score);
+				score.addScore();
 				break;
 			}
 		}
 	}
 
+	// Advance to the next level
 	if (totalBlocksDestroyed == PIECES)
 	{
-		nextLevel();
+		level++;
+		nextLevel(level);
 	}
-
-	// Update the Game HUD
-	updateHUD();
 
 	// Game over
 	if (ball.getLivesLeft() == 0)
 	{
-		quit();
+		restart();
 	}
 
 	int frameTicks = capTimer.getTicks();
@@ -227,24 +218,19 @@ void GameManager::tick()
 		SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
 	}
 
+	// Update game HUD every 10 ticks
+	if(frameTicks < 10)
+	{
+		updateHUD();
+	}
 }
 
 
-void GameManager::render()
+void GameManager::render() const
 {
-	// Cool random color background
-	srand(time(nullptr));
-	auto random1 = static_cast<double>(rand()) / (RAND_MAX)+1;
-	auto random2 = static_cast<double>(rand()) / (RAND_MAX)+1;
-	auto random3 = static_cast<double>(rand()) / (RAND_MAX)+1;
 
 	// Render background
-	SDL_SetRenderDrawColor(gRenderer,
-		random1 * 255,
-		random2 * 255,
-		random3 * 255,
-		0xff
-		);
+	SDL_SetRenderDrawColor(gRenderer, 0x11, 0x11, 0x11, 0xff);
 
 	// Clear the screen
 	SDL_RenderClear(gRenderer);
@@ -260,7 +246,8 @@ void GameManager::render()
 	// render the ball
 	spriteSheet.render(ball.getPosX(), ball.getPosY(), &ball.mCollider, gRenderer);
 
-	textRender.render(gRenderer, 0, SCREEN_HEIGHT - textRender.getHeight());
+	// render the hud
+	textRender.render(gRenderer, (SCREEN_WIDTH - textRender.getWidth()) / 2, SCREEN_HEIGHT - textRender.getHeight());
 
 	// render pieces
 	for (auto i = 0; i < PIECES; i++)
@@ -289,9 +276,9 @@ void GameManager::render()
 
 		// only if they're not hit
 		if (pieces[i].isVisible) {
-			SDL_RenderFillRect(gRenderer, pieces[i].pieceDimentions);
+			SDL_RenderFillRect(gRenderer, &pieces[i].pieceDimentions);
 			SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xff);
-			SDL_RenderDrawRect(gRenderer, pieces[i].pieceDimentions);
+			SDL_RenderDrawRect(gRenderer, &pieces[i].pieceDimentions);
 		}
 	}
 	// Update screen
@@ -317,32 +304,56 @@ void GameManager::close() {
 	SDL_Quit();
 }
 
-void GameManager::nextLevel()
+void GameManager::nextLevel(int level)
 {
 	totalBlocksDestroyed = 0;
-	level++;
 	ball.attachBall();
 	for (auto & piece : pieces)
 	{
 		piece.isVisible = true;
 	}
+	if (level < 4)
+		initBlocks(pieces, level);
+	else
+		initRandomMap(pieces);
 }
 
-void GameManager::initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int level)
+void GameManager::restart()
+{
+	level = 1;
+	nextLevel(level);
+	ball.setLives(3);
+	score.resetScore();
+}
+
+
+void GameManager::initBlocks(Piece* const pieces, int level)
 {
 	// 16 pieces per row in 5 rows
 	for (auto i = 0; i < PIECES; i++)
 	{
-		pieces[i].pieceDimentions->x = i % 16 * pieces[i].pieceDimentions->w;
-		pieces[i].pieceDimentions->y = i % 5 * pieces[i].pieceDimentions->h;
+		pieces[i].pieceDimentions.x = i % 16 * pieces[i].pieceDimentions.w;
+		pieces[i].pieceDimentions.y = i % 5 * level * pieces[i].pieceDimentions.h;
+	}
+	
+}
+
+// Mostly to demostrate move semantics in c++, couldn't find any other good use case for it
+// but i think this will demonstate it pretty good
+void GameManager::initRandomMap(Piece* const pieces) const
+{
+	srand(time(nullptr));
+	
+	for (auto i = 0; i < PIECES; i++)
+	{
+		Piece moveSemanticPiece;
+		moveSemanticPiece.pieceDimentions.x = SCREEN_WIDTH * (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+		moveSemanticPiece.pieceDimentions.y = (SCREEN_HEIGHT - 150) * (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+
+		// using the move assignement operator
+		pieces[i] = std::move(moveSemanticPiece);
 	}
 }
-
-void setScore (int n_score) 
-{
-	n_score = score;
-}
-
 
 GameManager::~GameManager()
 {

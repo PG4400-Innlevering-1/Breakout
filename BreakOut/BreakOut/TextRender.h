@@ -13,7 +13,7 @@ public:
 	TextRender();
 	~TextRender();
 	
-	SDL_Texture* mTexture;
+	SDL_Texture* mTexture = nullptr;
 
 	// loads the texture from the text string
 	bool loadTTF_FromString(SDL_Renderer* gRenderer, std::string textureText, SDL_Color textColor);
@@ -29,6 +29,8 @@ public:
 
 	int getWidth() const { return mWidth; };
 	int getHeight() const { return mHeight; };
+
+	void free();
 
 private:	
 

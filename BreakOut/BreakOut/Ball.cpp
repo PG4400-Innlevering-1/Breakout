@@ -44,22 +44,27 @@ float Ball::getVelY() const
 void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 {
 	// Wall collision
-	if (mPosY < 0)
+	if (mPosY < 0) // top wall
 	{
 		// entry angle = exit angle
 		mVelY = velocity;
 	}
-	else if (mPosX < 0 || SCREEN_WIDTH < mPosX + mCollider.w)
+	else if (mPosX < 0) // left wall
 	{
 		// entry angle = exit angle
-		mVelX = -mVelX;
+		mVelX = abs(mVelX);
+	}
+	else if(SCREEN_WIDTH < mPosX + mCollider.w) // right wall
+	{
+		mVelX = -abs(mVelX);
 	}
 	// Ball hits the floor
 	else if (SCREEN_HEIGHT < mPosY + mCollider.h)
 	{
-		ballsLeft--;
+		mLives--;
 		isAttached = true;
-		bUpdateHUD = true;
+		mVelX = 0;
+		mVelY = 0;
 	}
 	else if (paddle.getPosY() < mPosY + mCollider.h &&
 		paddle.getPosX() < mPosX + mCollider.w / 2 &&
@@ -100,7 +105,7 @@ void Ball::addInitialVelocity()
 {
 	if(isAttached)
 	{
-		mVelY = -200;
+		mVelY = -velocity;
 	}
 	isAttached = false;
 }

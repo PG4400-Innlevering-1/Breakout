@@ -12,6 +12,7 @@
 #include <array>
 #include "TextRender.h"
 #include "BackgroundMusic.h"
+#include "Score.h"
 
 
 using namespace std;
@@ -24,10 +25,6 @@ public:
 
 	// The window we will draw to
 	Window window;
-
-	int getScore();
-
-	void setScore (int score);
 
 	bool loadMedia();
 
@@ -50,7 +47,7 @@ public:
 	void tick();
 
 	// takes care of the rendering to the screen
-	void render();
+	void render() const;
 
 	// close the game and clean up
 	void close();
@@ -69,7 +66,7 @@ public:
 	Ball ball;
 
 	// the pieces
-	array<Piece, sizeof(Piece)*PIECES> pieces;
+	Piece pieces[PIECES];
 
 	// Game timers
 	typedef chrono::high_resolution_clock hr_clock;
@@ -96,9 +93,9 @@ public:
 	
 	// Screen Text HUD
 	TextRender textRender;
-	
 
-	int score = 0;
+	// holds the score count
+	Score score;
 
 private:
 	bool mRunning;
@@ -110,12 +107,13 @@ private:
 	Texture spriteSheet;
 	Texture gTexture;
 
-	int level = 0;
+	int level = 1;
 	int totalBlocksDestroyed = 0;
 	
 
-	void nextLevel();
-
-	static void initBlocks(array<Piece, sizeof(Piece)*PIECES> pieces, int level);
+	void nextLevel(int level);
+	void restart();
+	static void initBlocks(Piece*  const piece, int level);
+	void initRandomMap(Piece* const pieces) const;
 };
 

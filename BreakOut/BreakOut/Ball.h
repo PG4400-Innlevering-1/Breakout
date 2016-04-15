@@ -8,10 +8,10 @@ public:
 	Ball();
 	~Ball();
 
-	// Aka lives
-	int ballsLeft = 3;
-	bool bUpdateHUD = true;
+	// Players lives 
+	int mLives = 3;
 
+	// Bounding box
 	SDL_Rect mCollider;
 
 	float getPosX() const;
@@ -28,7 +28,8 @@ public:
 	void invertY();
 	void invertX();
 
-	int getLivesLeft() const { return ballsLeft; };
+	int getLivesLeft() const { return mLives; }
+	void setLives(int lives) { mLives = lives; }
 
 	void attachBall();
 	
@@ -38,8 +39,6 @@ private:
 	float mPosX, mPosY;
 
 	float mVelX, mVelY;
-
-	float mTinyOffset = 0.00025;
 
 	bool isAttached;
 

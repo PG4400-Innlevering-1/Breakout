@@ -9,14 +9,16 @@ class Piece
 public:
 	Piece();
 	~Piece();
-
-	SDL_Rect* pieceDimentions = new SDL_Rect();
+	Piece(Piece &&other) noexcept;
 	
+
+	Piece& operator=(Piece&& other) noexcept;
+	bool operator!=(const Piece& rhs) const;
+
+	SDL_Rect pieceDimentions;
 	bool isVisible = true;
 
 	bool hitByBall(Ball* ball, const SDL_Rect rect);
-
-
-	void free();
+	void reset();
 };
 

@@ -48,7 +48,7 @@ void Texture::render(const float x, const float y, const SDL_Rect* clip, SDL_Ren
 	SDL_RenderCopy(gRenderer, gTexture, clip, &renderingQuad);
 }
 
-// Demonstrating exeption handling by making my own exeptions
+// Demonstrating exception handling by making my own exceptions
 bool Texture::loadTexture(const std::string path, SDL_Renderer* gRenderer) 
 {
 	// the final texture

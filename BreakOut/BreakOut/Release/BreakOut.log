@@ -1,35 +1,23 @@
-﻿Build started 4/13/2016 4:50:44 AM.
-Project "C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\BreakOut\BreakOut.vcxproj" on node 2 (Build target(s)).
-ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IC:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\sdl2_image.v140.2.0.1\build\native\../..//build/native/include/ /I"C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\include" /IC:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\sdl2.v140.2.0.4\build\native\../..//build/native/include/ /IC:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\sdl2_ttf.v140.2.0.14\build\native\../..//build/native/include/ /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt GameManager.cpp Main.cpp
+﻿  Ball.cpp
+c:\users\edvin\google drive\breakout\breakout\breakout\Ball.h(41): warning C4305: 'initializing': truncation from 'double' to 'float'
+Ball.cpp(74): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+Ball.cpp(77): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+Ball.cpp(97): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+Ball.cpp(98): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
   GameManager.cpp
-c:\users\edvin\documents\github\breakout\breakout\breakout\Ball.h(42): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\edvin\google drive\breakout\breakout\breakout\Ball.h(41): warning C4305: 'initializing': truncation from 'double' to 'float'
 GameManager.cpp(116): warning C4551: function call missing argument list
 GameManager.cpp(121): warning C4551: function call missing argument list
-GameManager.cpp(188): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-GameManager.cpp(189): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-GameManager.cpp(236): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-GameManager.cpp(247): warning C4244: 'argument': conversion from 'double' to 'Uint8', possible loss of data
+GameManager.cpp(184): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+GameManager.cpp(185): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  InputManager.cpp
   Main.cpp
-c:\users\edvin\documents\github\breakout\breakout\breakout\Ball.h(42): warning C4305: 'initializing': truncation from 'double' to 'float'
-Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\BreakOut.exe" /INCREMENTAL:NO /NOLOGO C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\sdl2_image.v140.2.0.1\build\native\../..//build/native/lib/Win32\Release\sdl2_image.lib "C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\zlib.v140.windesktop.msvcstl.dyn.rt-dyn.1.2.8.8\build\native\..\..\lib\native\v140\windesktop\msvcstl\dyn\rt-dyn\Win32\Release\zlib.lib" C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\sdl2.v140.2.0.4\build\native\../..//build/native/lib/Win32\Release\SDL2main.lib C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\sdl2.v140.2.0.4\build\native\../..//build/native/lib/Win32\Release\SDL2.lib C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\packages\sdl2_ttf.v140.2.0.14\build\native\../..//build/native/lib/Win32\Release\SDL2_ttf.lib SDL2_mixer.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\BreakOut.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\BreakOut.lib" /MACHINE:X86 /SAFESEH Release\BackgroundMusic.obj
-  Release\Ball.obj
-  Release\Board.obj
-  Release\GameManager.obj
-  Release\InputManager.obj
-  Release\Main.obj
-  Release\MediaManager.obj
-  Release\Paddle.obj
-  Release\Piece.obj
-  Release\TextRender.obj
-  Release\Texture.obj
-  Release\Timer.obj
-  Release\Window.obj
-GameManager.obj : error LNK2001: unresolved external symbol "public: int __thiscall GameManager::getScore(void)" (?getScore@GameManager@@QAEHXZ)
-C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\BreakOut.exe : fatal error LNK1120: 1 unresolved externals
-Done Building Project "C:\Users\Edvin\Documents\GitHub\Breakout\BreakOut\BreakOut\BreakOut.vcxproj" (Build target(s)) -- FAILED.
-
-Build FAILED.
-
-Time Elapsed 00:00:44.29
+c:\users\edvin\google drive\breakout\breakout\breakout\Ball.h(41): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Paddle.cpp
+Paddle.cpp(46): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+Paddle.cpp(55): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+Paddle.cpp(90): error C2677: binary '[': no global operator found which takes type 'SDL_Scancode' (or there is no acceptable conversion)
+Paddle.cpp(94): error C2677: binary '[': no global operator found which takes type 'SDL_Scancode' (or there is no acceptable conversion)
+  Piece.cpp
+c:\users\edvin\google drive\breakout\breakout\breakout\Ball.h(41): warning C4305: 'initializing': truncation from 'double' to 'float'
+Piece.cpp(30): warning C4800: 'SDL_bool': forcing value to bool 'true' or 'false' (performance warning)

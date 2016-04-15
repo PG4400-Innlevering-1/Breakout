@@ -8,7 +8,7 @@ public:
 	InputManager();
 	~InputManager();
 
-	const Uint8* keys = nullptr;
+	const Uint8* keys;
 	int numKeys; 
 				
 
