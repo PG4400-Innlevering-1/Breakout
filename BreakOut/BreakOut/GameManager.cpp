@@ -104,21 +104,31 @@ bool GameManager::init()
 		success = false;
 	}
 
+	// Initalizing default constructor of pieces, utilizing copy and move constructors
+	Piece defaultInit;
+	for (auto i = 0; i < PIECES; i++)
+	{
+		pieces.push_back(defaultInit);
+	}
+
 	// initialize the pieces level 0
 	initBlocks(pieces, level);
+
+	threadID = SDL_CreateThread(threading_.threadedFunction, "PrintingThread", static_cast<void*>(&ball));
+	threadRunning = true;
 
 	return success;
 }
 
 
-void GameManager::pause()
+void GameManager::pause() const
 {
-	bgMusic.pause;
+	bgMusic.pause();
 }
 
-void GameManager::resume() 
+void GameManager::resume() const
 {
-	bgMusic.resume;
+	bgMusic.resume();
 }
 
 void GameManager::updateHUD()
@@ -143,7 +153,8 @@ void GameManager::handleEvents()
 
 		//User requests quit
 		if (event.type == SDL_QUIT) {
-			mRunning = false;
+			threading_.endThread();
+			quit();
 		}
 	}
 
@@ -223,6 +234,7 @@ void GameManager::tick()
 	{
 		updateHUD();
 	}
+
 }
 
 
@@ -275,10 +287,11 @@ void GameManager::render() const
 		}
 
 		// only if they're not hit
-		if (pieces[i].isVisible) {
-			SDL_RenderFillRect(gRenderer, &pieces[i].pieceDimentions);
+		// .get() for the smart pointer to a normal pointer that can be used by our C library
+		if (pieces.at(i).isVisible) {
+			SDL_RenderFillRect(gRenderer, pieces.at(i).pieceDimentions.get());
 			SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0xff);
-			SDL_RenderDrawRect(gRenderer, &pieces[i].pieceDimentions);
+			SDL_RenderDrawRect(gRenderer, pieces.at(i).pieceDimentions.get());
 		}
 	}
 	// Update screen
@@ -327,31 +340,27 @@ void GameManager::restart()
 }
 
 
-void GameManager::initBlocks(Piece* const pieces, int level)
+void GameManager::initBlocks(vector<Piece> &pieces, int level)
 {
 	// 16 pieces per row in 5 rows
 	for (auto i = 0; i < PIECES; i++)
 	{
-		pieces[i].pieceDimentions.x = i % 16 * pieces[i].pieceDimentions.w;
-		pieces[i].pieceDimentions.y = i % 5 * level * pieces[i].pieceDimentions.h;
+		pieces.at(i).pieceDimentions->x = i % 16 * pieces.at(0).pieceDimentions->w;
+		pieces.at(i).pieceDimentions->y = i % 5 * level * pieces.at(0).pieceDimentions->h;
 	}
 	
 }
 
-// Mostly to demostrate move semantics in c++, couldn't find any other good use case for it
-// but i think this will demonstate it pretty good
-void GameManager::initRandomMap(Piece* const pieces) const
+
+void GameManager::initRandomMap(vector<Piece> &pieces)
 {
 	srand(time(nullptr));
 	
 	for (auto i = 0; i < PIECES; i++)
 	{
-		Piece moveSemanticPiece;
-		moveSemanticPiece.pieceDimentions.x = SCREEN_WIDTH * (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
-		moveSemanticPiece.pieceDimentions.y = (SCREEN_HEIGHT - 150) * (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
-
-		// using the move assignement operator
-		pieces[i] = std::move(moveSemanticPiece);
+		// random place within the playable battlefield
+		pieces.at(i).pieceDimentions->x = (SCREEN_WIDTH - 50) * (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+		pieces.at(i).pieceDimentions->y = (SCREEN_HEIGHT - 150) * (static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
 	}
 }
 

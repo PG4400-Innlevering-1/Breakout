@@ -2,9 +2,7 @@
 #include <exception>
 
 
-using namespace std;
-
-class UnableToOptimizeImageException : public exception
+class UnableToOptimizeImageException : public std::exception
 {
 	const char* what() const throw() override
 	{

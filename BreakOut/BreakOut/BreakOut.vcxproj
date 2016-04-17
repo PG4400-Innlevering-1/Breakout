@@ -164,17 +164,16 @@
   <ItemGroup>
     <ClInclude Include="BackgroundMusic.h" />
     <ClInclude Include="Ball.h" />
-    <ClInclude Include="Board.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="ImageNotFoundException.h" />
     <ClInclude Include="InputManager.h" />
-    <ClInclude Include="MediaManager.h" />
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="TextRender.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Threading.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UnableToOptimizeImageException.h" />
     <ClInclude Include="Window.h" />
@@ -182,16 +181,15 @@
   <ItemGroup>
     <ClCompile Include="BackgroundMusic.cpp" />
     <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="Board.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MediaManager.cpp" />
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="TextRender.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Threading.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

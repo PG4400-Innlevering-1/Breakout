@@ -40,7 +40,7 @@ Paddle::~Paddle()
 {
 }
 
-void Paddle::move(double deltaTime)
+void Paddle::move(const double deltaTime)
 {
 	// move the paddle left or right
 	mPosX += mVelX*deltaTime;

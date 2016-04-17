@@ -13,7 +13,7 @@ public:
 	void free();
 
 	// renders the texture to the given point
-	void render(const float x, const float y, const SDL_Rect* clip, SDL_Renderer* gRenderer) const;
+	void render(const float x, const float y, const SDL_Rect* clip, SDL_Renderer* const gRenderer) const;
 
 	// get the image dimetions
 	int getWidth() const;

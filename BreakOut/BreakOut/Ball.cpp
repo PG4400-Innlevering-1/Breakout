@@ -1,6 +1,5 @@
 #include "Ball.h"
-#include "Window.h"
-#include <cmath>
+
 
 
 Ball::Ball()
@@ -44,12 +43,12 @@ float Ball::getVelY() const
 void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 {
 	// Wall collision
-	if (mPosY < 0) // top wall
+	if (mPosY < 0)								// top wall
 	{
 		// entry angle = exit angle
 		mVelY = velocity;
 	}
-	else if (mPosX < 0) // left wall
+	else if (mPosX < 0)							// left wall
 	{
 		// entry angle = exit angle
 		mVelX = abs(mVelX);
@@ -58,8 +57,8 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 	{
 		mVelX = -abs(mVelX);
 	}
-	// Ball hits the floor
-	else if (SCREEN_HEIGHT < mPosY + mCollider.h)
+												// Ball hits the floor
+	else if ((SCREEN_HEIGHT - 50) < mPosY + mCollider.h)
 	{
 		mLives--;
 		isAttached = true;
@@ -74,7 +73,7 @@ void Ball::checkCollision(const Paddle paddle, const double deltaTime)
 		float pointOnPaddle = mPosX + (mCollider.w / 2) + 22.5 - paddle.getPosX();
 
 		// use this point to get a value range(-1, 1) for the velocity x
-		mVelX = -200*cos(pointOnPaddle * M_PI / 180);
+		mVelX = -velocity*cos(pointOnPaddle * M_PI / 180);
 
 		// reflect in the opposite direction for the y axis
 		mPosY -= 0.5;

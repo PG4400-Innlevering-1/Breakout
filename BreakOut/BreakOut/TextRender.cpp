@@ -9,11 +9,10 @@ TextRender::TextRender() : mWidth(0), mHeight(0)
 
 TextRender::~TextRender()
 { 
-	//TTF_CloseFont(font);
 }
 
 
-bool TextRender::loadTTF_FromString(SDL_Renderer* gRenderer, std::string textureText, SDL_Color textColor)
+bool TextRender::loadTTF_FromString(SDL_Renderer* const gRenderer, const std::string textureText, const SDL_Color textColor)
 {
 	//Render text surface
 	auto* textSurface = TTF_RenderText_Solid(font, textureText.c_str(), textColor);
@@ -61,7 +60,8 @@ bool TextRender::loadFont()
 }
 
 
-void TextRender::render(SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) const
+void TextRender::render(SDL_Renderer* const renderer, const int x, const int y, const SDL_Rect* clip, 
+	const double angle, const SDL_Point* center, const SDL_RendererFlip flip) const
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, mWidth, mHeight };

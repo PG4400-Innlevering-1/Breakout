@@ -1,6 +1,8 @@
 #pragma once
 #include "../packages/sdl2.v140.2.0.4/build/native/include/SDL.h"
 #include "Paddle.h"
+#include "Window.h"
+#include <cmath>
 
 class Ball
 {
@@ -29,7 +31,7 @@ public:
 	void invertX();
 
 	int getLivesLeft() const { return mLives; }
-	void setLives(int lives) { mLives = lives; }
+	void setLives(const int lives) { mLives = lives; }
 
 	void attachBall();
 	

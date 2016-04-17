@@ -1,9 +1,8 @@
 ﻿#pragma once
 #include <exception>
 
-using namespace std;
 
-class ImageNotFoundException : public exception
+class ImageNotFoundException : public std::exception
 {
 	const char* what() const throw() override
 	{

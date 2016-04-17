@@ -1,18 +1,17 @@
 #pragma once
-#include <cstdio>
 #include <SDL.h>
 #include "Window.h"
-#include "MediaManager.h"
 #include "Texture.h"
 #include "Paddle.h"
 #include <chrono>
 #include "Timer.h"
 #include "Ball.h"
 #include "Piece.h"
-#include <array>
 #include "TextRender.h"
 #include "BackgroundMusic.h"
 #include "Score.h"
+#include <vector>
+#include "Threading.h"
 
 
 using namespace std;
@@ -32,10 +31,10 @@ public:
 	bool init();
 
 	// for when we want to pause
-	void pause();
+	void pause() const;
 
 	// no longer paused
-	void resume();
+	void resume() const;
 
 	// Update the UI/HUD
 	void updateHUD();
@@ -66,7 +65,7 @@ public:
 	Ball ball;
 
 	// the pieces
-	Piece pieces[PIECES];
+	vector<Piece> pieces;
 
 	// Game timers
 	typedef chrono::high_resolution_clock hr_clock;
@@ -97,6 +96,8 @@ public:
 	// holds the score count
 	Score score;
 
+	SDL_Thread* threadID = nullptr;
+
 private:
 	bool mRunning;
 
@@ -107,13 +108,14 @@ private:
 	Texture spriteSheet;
 	Texture gTexture;
 
+	Threading threading_;
+
 	int level = 1;
 	int totalBlocksDestroyed = 0;
 	
-
 	void nextLevel(int level);
 	void restart();
-	static void initBlocks(Piece*  const piece, int level);
-	void initRandomMap(Piece* const pieces) const;
+	static void initBlocks(vector<Piece> &piece, int level);
+	static void initRandomMap(vector<Piece> &pieces);
 };
 

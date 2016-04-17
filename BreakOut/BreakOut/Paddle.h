@@ -18,7 +18,7 @@ public:
 	float getVelX() const;
 	float getVelY() const;
 
-	void move(double deltaTime);
+	void move(const double deltaTime);
 
 	void handleEvent(const InputManager input);
 

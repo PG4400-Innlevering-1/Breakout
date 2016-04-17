@@ -2,10 +2,10 @@
 #include <array>
 
 
-Piece::Piece()
+Piece::Piece() : pieceDimentions(new SDL_Rect())
 {
-	pieceDimentions.h = 30;
-	pieceDimentions.w = 50;
+	pieceDimentions->h = 30;
+	pieceDimentions->w = 50;
 }
 
 
@@ -13,6 +13,15 @@ Piece::~Piece()
 {
 }
 
+// Copy constructor
+Piece::Piece(const Piece &other) noexcept : pieceDimentions( new SDL_Rect(*other.pieceDimentions))
+{
+	isVisible = other.isVisible;
+	printf("Copy constructor called\n");
+}
+
+// Mostly to demostrate move semantics in c++, couldn't find any other good use case for it
+// but i think this will demonstate it pretty good
 Piece::Piece(Piece &&other) noexcept
 {
 	isVisible = std::move(other.isVisible);
@@ -21,7 +30,7 @@ Piece::Piece(Piece &&other) noexcept
 	printf("Move Constructer called\n");
 }
 
-
+// Move assinment operator
 Piece& Piece::operator=(Piece&& other) noexcept
 {
 	if(this != &other)
@@ -39,16 +48,16 @@ Piece& Piece::operator=(Piece&& other) noexcept
 bool Piece::operator!=(const Piece& rhs) const
 {
 	return
-		pieceDimentions.w != rhs.pieceDimentions.w ||
-		pieceDimentions.h != rhs.pieceDimentions.h ||
-		pieceDimentions.x != rhs.pieceDimentions.x ||
-		pieceDimentions.y != rhs.pieceDimentions.y ||
+		pieceDimentions->w != rhs.pieceDimentions->w ||
+		pieceDimentions->h != rhs.pieceDimentions->h ||
+		pieceDimentions->x != rhs.pieceDimentions->x ||
+		pieceDimentions->y != rhs.pieceDimentions->y ||
 		isVisible != rhs.isVisible;
 }
 
 bool Piece::hitByBall(Ball *ball, const SDL_Rect rect)
 {
-	auto collision = SDL_HasIntersection(&rect, &pieceDimentions);
+	auto collision = SDL_HasIntersection(&rect, pieceDimentions.get());
 	
 	if(collision)
 	{
@@ -62,13 +71,17 @@ bool Piece::hitByBall(Ball *ball, const SDL_Rect rect)
 	return collision;
 }
 
+// Smart pointer dereference and list initialization
 void Piece::reset()
 {
 	isVisible = true;
-	pieceDimentions = {
-		pieceDimentions.h = 30, 
-		pieceDimentions.w = 50, 
-		pieceDimentions.x = 0, 
-		pieceDimentions.y = 0 
-	};
+	if (pieceDimentions != nullptr) 
+	{
+		*pieceDimentions = {
+			pieceDimentions->h = 30,
+			pieceDimentions->w = 50,
+			pieceDimentions->x = 0,
+			pieceDimentions->y = 0
+		};
+	}
 }
