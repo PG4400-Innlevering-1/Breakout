@@ -15,7 +15,7 @@ Threading::~Threading()
 int Threading::threadedFunction(void* data)
 {
 	// print the data
-	std::cout << "Running thread with value = " << reinterpret_cast<int>(data) << std::endl;
+	cout << "Running thread with value = " << reinterpret_cast<int>(data) << endl;
 
 	genericThreadFunction(data);
 	return 0;
@@ -28,11 +28,11 @@ int Threading::threadedFunction(void* data)
 template <class T>
 void Threading::genericThreadFunction(T &data)
 {
-	std::cout << "Running thread with value = " << reinterpret_cast<int>(data) << std::endl;
+	cout << "Running thread with value = " << reinterpret_cast<int>(data) << endl;
 
 	auto* logBall = static_cast<Ball*>(data);
 
-	std::thread threadOne(stdThreadFunction, logBall);
+	thread threadOne(stdThreadFunction, logBall);
 
 	threadOne.join();
 }

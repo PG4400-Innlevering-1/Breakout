@@ -18,13 +18,12 @@ public:
 	static int threadedFunction(void* data);
 
 	template <class T>
-
 	static void genericThreadFunction(T &data);
 	
 	template <class T>
 	static T const& max(T const& a, T const& b);
+		
 	static void stdThreadFunction(Ball* ball);
-
 
 	static void endThread();
 

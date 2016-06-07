@@ -71,25 +71,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build</OutDir>
     <IncludePath>$(PG4400_SDL2_PATH)\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(PG4400_SDL2_PATH)\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build</OutDir>
     <IncludePath>$(PG4400_SDL2_PATH)\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(PG4400_SDL2_PATH)\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build</OutDir>
     <IncludePath>$(PG4400_SDL2_PATH)\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(PG4400_SDL2_PATH)\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)</OutDir>
+    <OutDir>$(SolutionDir)build</OutDir>
     <IncludePath>$(PG4400_SDL2_PATH)\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(PG4400_SDL2_PATH)\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
