@@ -1,6 +1,6 @@
 #pragma once
 #include "../packages/sdl2.v140.2.0.4/build/native/include/SDL.h"
-#include <SDL_mixer.h>
+#include "../packages/sdl2_mixer/include/SDL_mixer.h"
 #include <stdio.h>
 #include <string>	
 
